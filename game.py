@@ -5,7 +5,7 @@ import logic
 
 
 class Game:
-    def __init__(self, width=2000, height=1000, title="Game of Life", fps=60):
+    def __init__(self, width=1200, height=1200, title="Game of Life", fps=60):
         pygame.init()
         pygame.mouse.set_visible(False)
 
@@ -27,7 +27,7 @@ class Game:
         self.paused = False
 
         self.time = 0
-        self.sim_speed = 30
+        self.sim_speed = 60
 
         self.pressed = (False, False, False)
 
@@ -91,7 +91,7 @@ class Game:
     @property
     def cell_size(self):
         return (max(1, self.screen_size[0] // self.board_size[0]),
-                max(1 ,self.screen_size[1] // self.board_size[1]))
+                max(1, self.screen_size[1] // self.board_size[1]))
 
     def draw_cells(self):
         self.change_cell_color()
@@ -100,7 +100,7 @@ class Game:
         for x in range(self.board_size[0]):
             for y in range(self.board_size[1]):
                 if self.board[y][x] == 1:
-                    cell = pygame.Rect(cell_width * x, cell_height * y, cell_width, cell_height)
+                    cell = pygame.Rect(cell_width * x + 1, cell_height * y + 1, cell_width - 2, cell_height - 2)
                     pygame.draw.rect(self.screen, self.cell_color, cell)
 
     def update_board_state(self, steps=1):
@@ -124,7 +124,7 @@ class Game:
     def clear_screen(self):
         self.screen.fill(self.background_color)
 
-    def draw_cursor(self, border_width=3):
+    def draw_cursor(self, border_width=1):
         x, y = self.get_mouse_cell(pygame.mouse.get_pos())
         cell = pygame.Rect(self.cell_size[0] * x, self.cell_size[1] * y,
                            self.cell_size[0], self.cell_size[1])

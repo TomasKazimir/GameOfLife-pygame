@@ -4,17 +4,16 @@ type Size = tuple[int, int]
 
 def load_board() -> tuple[Matrix, Size]:
     with open("saved_board.txt", "r", encoding="utf-8") as save_file:
-        y = int(save_file.readline().rstrip())
-        x = int(save_file.readline().rstrip())
-
         board = []
-        for _ in range(y):
-            line = save_file.readline().rstrip()
+        lines = save_file.readlines()
+        x, y = len(lines[0]), len(lines)
+        for line in lines:
+            line = line.rstrip()
             board.append([0 if char == "." else 1 for char in line])
 
     print("Board loaded:")
     print(*board, sep="\n")
-    return center(board, (x, y), (200, 100))
+    return center(board, (x, y), (100, 100))
 
 def center(board, size, target_size) -> tuple[Matrix, Size]:
     board_x = len(board[0])
