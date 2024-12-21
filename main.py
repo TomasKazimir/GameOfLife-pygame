@@ -7,9 +7,6 @@ from game import Game
 ### TODO: docstrings
 
 
-
-
-
 def main():
     game = Game()
     game.run()

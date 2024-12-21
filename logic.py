@@ -18,8 +18,6 @@ def get_next_generation(board) -> tuple[Matrix, Size]:
         "live": (3, 3)
     }
 
-
-
     for i in range(m):
         for j in range(n):
             count = 0 if board[i][j] == 0 else -1
@@ -28,7 +26,7 @@ def get_next_generation(board) -> tuple[Matrix, Size]:
                     if board[di % m][dj % n] == 1:
                         count += 1
             if board[i][j] == 1:
-                if  count < rule["die"][0] or count > rule["die"][1]:
+                if count < rule["die"][0] or count > rule["die"][1]:
                     next[i][j] = 0
                 else:
                     next[i][j] = 1

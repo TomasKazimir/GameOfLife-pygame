@@ -15,6 +15,7 @@ def load_board() -> tuple[Matrix, Size]:
     print(*board, sep="\n")
     return center(board, (x, y), (100, 100))
 
+
 def center(board, size, target_size) -> tuple[Matrix, Size]:
     board_x = len(board[0])
     board_y = len(board)
@@ -33,5 +34,6 @@ def center(board, size, target_size) -> tuple[Matrix, Size]:
     print(*out, sep="\n")
     return out, target_size
 
+
 def center_line(line, line_len, target_len):
-    return [0] * ((target_len - line_len) // 2)  + line  + [0] * ((target_len - line_len + 1) // 2)
+    return [0] * ((target_len - line_len) // 2) + line + [0] * ((target_len - line_len + 1) // 2)
