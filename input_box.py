@@ -4,22 +4,24 @@ import pygame
 
 
 class InputBox:
-    color_active = (200, 200, 200)
+    color_active = (200, 150, 150)
     color_inactive = (150, 150, 150)
 
     pygame.font.init()
     base_font = pygame.font.SysFont("consolas", 28)
 
-    def __init__(self, screen, pos, width=200, height=32):
+    def __init__(self, screen, pos, width=200, height=70, title="InputBox:"):
         self.screen = screen
         self.pos = pos
         self.width = width
         self.height = height
+        self.title = title
 
         self.value = ""
         self.is_active = False
 
         self.surface = pygame.Surface((self.width, self.height))
+        self.title_surface = self.base_font.render(self.title, True, (10, 10, 10), (255, 255, 255))
 
     @property
     def collision_rect(self):
@@ -61,10 +63,9 @@ class InputBox:
 
     def draw(self):
         self.surface.fill(self.color_active if self.is_active else self.color_inactive)
-        text_surface = self.base_font.render(self.value,
-                                             True,
-                                             (10, 10, 10))
-        self.surface.blit(text_surface, (0, 0))
+        self.surface.blit(self.title_surface, (5, 5))
+        text_surface = self.base_font.render(self.value, True, (10, 10, 10))
+        self.surface.blit(text_surface, (5, self.height//2 + 5))
         self.screen.blit(self.surface, (self.pos[0], self.pos[1]))
 
 

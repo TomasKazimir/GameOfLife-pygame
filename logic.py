@@ -8,7 +8,7 @@ def get_next_generation(board):
     }
 
     rule = {
-        "radius": 1,
+        "radius": 4,
         "die": (2, 3),
         "live": (3, 3)
     }

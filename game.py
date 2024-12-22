@@ -6,34 +6,50 @@ from input_box import InputBox
 
 
 class Game:
-    def __init__(self, width=1400, height=1200, title="Game of Life", fps=60):
-        pygame.init()
-        pygame.mouse.set_visible(False)
+    WINDOW_WIDTH = 1400
+    WINDOW_HEIGHT = 1200
 
-        self.screen_size = width, height
+    SIDEPANEL_WIDTH = 200
+
+    pygame.font.init()
+    base_font = pygame.font.SysFont("consolas", 28)
+
+    def __init__(self, width=WINDOW_WIDTH, height=WINDOW_HEIGHT, title="Game of Life", fps=60):
+        pygame.init()
+
+        # window setup
+        self.screen_size = (width, height)
         self.screen = pygame.display.set_mode(self.screen_size)
         pygame.display.set_caption(title)
 
-        self.background_color = (0, 0, 0)  # Black background
+        # color
+        self.background_color = (0, 0, 0)
         self.cell_color = [0, 85, 170]
         self.color_step = [3, -3, 3]
 
+        # cell board
         board, size = load.load_board()
         self.board = board
         self.board_size = size
+        self.board_size_px = width - Game.SIDEPANEL_WIDTH, height
 
-        self.panel_width = 200
-        self.board_size_px = width - self.panel_width, height
-        self.rulebox = InputBox(self.screen, (width - self.panel_width, 0))
+        # sidepanel
+        self.sidepanel_size = Game.SIDEPANEL_WIDTH, height
+        self.sidepanel_pos = (width - self.sidepanel_size[0], 0)
+        self.sidepanel = pygame.Surface(self.sidepanel_size)
 
+        self.rulebox = InputBox(self.screen,
+                                pos=(self.sidepanel_pos[0], 50))
+
+        # state
         self.running = True
         self.paused = False
 
         # simulation speed
         self.clock = pygame.time.Clock()
         self.FPS = fps
-        self.time = 0  # since last update
-        self.sim_speed = 10  # (ideally) in Hz
+        self.time = 0        # since last update
+        self.sim_speed = 100  # (ideally) in Hz
 
         # mouse
         self.pressed = (False, False, False)
@@ -184,7 +200,11 @@ class Game:
         pygame.draw.rect(self.screen, (255, 0, 0), cell, border_width)
 
     def draw_GUI(self):
+        self.sidepanel.fill((50, 50, 50))
+        self.screen.blit(self.sidepanel, self.sidepanel_pos)
+
         self.rulebox.draw()
+
 
     # endregion DRAWING
 
