@@ -1,25 +1,14 @@
-import numpy as np
-
-
-
-def load_board():
-    board, size = _load_board()
-    return np.array(board), size
-
-
-
-def _load_board():
-    with open("saved_board.txt", "r", encoding="utf-8") as save_file:
+def load_board(filename, size=(100,100)):
+    with open(filename, "r", encoding="utf-8") as save_file:
         board = []
-        lines = save_file.readlines()
-        x, y = len(lines[0]), len(lines)
-        for line in lines:
-            line = line.rstrip()
+        x, y = tuple(map(int, save_file.readline().rstrip().split(";")))
+
+        while (line := save_file.readline().rstrip()) != "":
             board.append([0 if char == "." else 1 for char in line])
 
     # print("Board loaded:")
     # print(*board, sep="\n")
-    return center(board, (x, y), (100, 100))
+    return center(board, (x, y), size)
 
 
 def center(board, size, target_size):
