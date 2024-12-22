@@ -1,11 +1,6 @@
-type Matrix = list[list]
-type Size = tuple[int, int]
-
-
-def get_next_generation(board) -> tuple[Matrix, Size]:
+def get_next_generation(board):
     m, n = len(board), len(board[0])
     next = [[0 for _ in range(n)] for _ in range(m)]
-
     brain = {
         "radius": 1,
         "die": (2, 4),
