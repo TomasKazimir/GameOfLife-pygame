@@ -1,22 +1,17 @@
-type Matrix = list[list]
-type Size = tuple[int, int]
-
-
-def load_board() -> tuple[Matrix, Size]:
-    with open("saved_board.txt", "r", encoding="utf-8") as save_file:
+def load_board(filename, size=(100,100)):
+    with open(filename, "r", encoding="utf-8") as save_file:
         board = []
-        lines = save_file.readlines()
-        x, y = len(lines[0]), len(lines)
-        for line in lines:
-            line = line.rstrip()
+        x, y = tuple(map(int, save_file.readline().rstrip().split(";")))
+
+        while (line := save_file.readline().rstrip()) != "":
             board.append([0 if char == "." else 1 for char in line])
 
-    print("Board loaded:")
-    print(*board, sep="\n")
-    return center(board, (x, y), (100, 100))
+    # print("Board loaded:")
+    # print(*board, sep="\n")
+    return center(board, (x, y), size)
 
 
-def center(board, size, target_size) -> tuple[Matrix, Size]:
+def center(board, size, target_size):
     board_x = len(board[0])
     board_y = len(board)
 
@@ -30,8 +25,8 @@ def center(board, size, target_size) -> tuple[Matrix, Size]:
         out.append(center_line(board[i], board_x, target_size[0]))
     for i in range(target_size[1] - len(out)):
         out.append([0] * target_size[0])
-    print("Board centered:")
-    print(*out, sep="\n")
+    # print("Board centered:")
+    # print(*out, sep="\n")
     return out, target_size
 
 

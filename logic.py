@@ -1,8 +1,4 @@
-type Matrix = list[list]
-type Size = tuple[int, int]
-
-
-def get_next_generation(board) -> tuple[Matrix, Size]:
+def get_next_generation(board, rule=None):
     m, n = len(board), len(board[0])
     next = [[0 for _ in range(n)] for _ in range(m)]
 
@@ -12,25 +8,26 @@ def get_next_generation(board) -> tuple[Matrix, Size]:
         "live": (3, 3)
     }
 
-    rule = {
-        "radius": 1,
-        "die": (2, 3),
-        "live": (3, 3)
-    }
+    if rule is None:
+        rule = {
+            "R": [1],
+            "B": [3],
+            "S": [2, 3]
+        }
 
     for i in range(m):
         for j in range(n):
+            cell = board[i][j]
             count = 0 if board[i][j] == 0 else -1
-            for di in range((i - rule["radius"]), (i + rule["radius"]) + 1):
-                for dj in range((j - rule["radius"]), (j + rule["radius"]) + 1):
+            # NEIGHBOURS
+            for di in range(
+                    max(0, i - rule["R"][0]), min(m, (i + rule["R"][0]) + 1)):
+                for dj in range(
+                        max(0, j - rule["R"][0]), min(n, (j + rule["R"][0]) + 1)):
                     if board[di % m][dj % n] == 1:
                         count += 1
-            if board[i][j] == 1:
-                if count < rule["die"][0] or count > rule["die"][1]:
-                    next[i][j] = 0
-                else:
+            if cell == 1 and count in rule["S"]:
                     next[i][j] = 1
-            elif board[i][j] == 0:
-                if rule["live"][0] <= count <= rule["live"][1]:
+            elif cell == 0 and count in rule["B"]:
                     next[i][j] = 1
     return next
