@@ -86,7 +86,7 @@ class Game:
                            pos=(self.sidepanel_pos[0] + offset, 500),
                            size=(200, 40)),
             text="Reset board")
-        self.noise_button = NoiseButton(  # TODO
+        self.noise_button = NoiseButton(
             GUIElementInfo(self.screen, self,
                            pos=(self.sidepanel_pos[0] + offset, 600),
                            size=(200, 40)),
