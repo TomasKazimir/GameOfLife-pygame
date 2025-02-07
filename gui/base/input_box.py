@@ -12,13 +12,13 @@ class InputBox(GUIElement):
     pygame.font.init()
     title_font = pygame.font.SysFont("consolas", 28)
     value_font = pygame.font.SysFont("consolas", 20)
-    cursor = "."
+    cursor = "|" # Cursor character
 
     def __init__(self, setup, title="Title:"):
         super().__init__(setup)
 
         self.title = title
-        self.value = ""
+        self.text = ""
         self.cursor_pos = 0
 
         self.title_surface = self.title_font.render(self.title, True, self.font_color, (255, 255, 255))
@@ -49,76 +49,81 @@ class InputBox(GUIElement):
             self.increment_cursor()
         elif event.mod & pygame.KMOD_CTRL:
             if key == pygame.K_c:
-                pyperclip.copy(self.value)
+                pyperclip.copy(self.text)
                 return False
             elif key == pygame.K_v:
-                self.value += pyperclip.paste()
+                self.text += pyperclip.paste()
                 return False
         else:
             self.add_char(event.unicode)
 
         return False
 
-    def increment_cursor(self):
-        self.cursor_pos = min(self.cursor_pos + 1, len(self.value))
+    def increment_cursor(self) -> None:
+        """
+        Increment the cursor position by 1 - shift to the right.
+        :return: None
+        """
+        self.cursor_pos = min(self.cursor_pos + 1, len(self.text))
 
-    def decrement_cursor(self):
+    def decrement_cursor(self) -> None:
+        """
+        Decrement the cursor position by 1 - shift to the left.
+        :return: None
+        """
         self.cursor_pos = max(self.cursor_pos - 1, 0)
 
-    def move_cursor_to_end(self):
-        self.cursor_pos = len(self.value)
+    def move_cursor_to_end(self) -> None:
+        """
+        Move the cursor to the end of the text.
+        :return: None
+        """
+        self.cursor_pos = len(self.text)
 
-    def backspace(self):
+    def backspace(self) -> None:
+        """
+        Remove the character before the cursor.
+        :return: None
+        """
         if self.cursor_pos == 0:
             return
-        v1 = self.value[:self.cursor_pos - 1]
-        v2 = self.value[self.cursor_pos:]
-        self.value = v1 + v2
+        v1 = self.text[:self.cursor_pos - 1]
+        v2 = self.text[self.cursor_pos:]
+        self.text = v1 + v2
         self.decrement_cursor()
 
-    def add_char(self, char):
-        v1 = self.value[:self.cursor_pos]
-        v2 = self.value[self.cursor_pos:]
-        self.value = v1 + char + v2
+    def add_char(self, char) -> None:
+        """
+        Add a character at the cursor position.
+        :param char: str
+        :return: None
+        """
+        v1 = self.text[:self.cursor_pos]
+        v2 = self.text[self.cursor_pos:]
+        self.text = v1 + char + v2
         self.cursor_pos += len(char)
 
-    def clear_input(self):
-        self.value = ""
+
+    def clear_input(self) -> None:
+        """
+        Clear the input box.
+        :return: None
+        """
+        self.text = ""
         self.cursor_pos = 0
 
+
     def draw(self):
+        """
+        Draw the input box on the screen.
+        :return: None
+        """
         self.surface.fill(self.color_active if self.is_active else self.color_inactive)
         self.surface.blit(self.title_surface, (5, 5))
-        text_surface = self.value_font.render(self.value, True, self.font_color)
+        text_surface = self.value_font.render(self.text, True, self.font_color)
         self.surface.blit(text_surface, (5, self.height // 2 + 3))
         if self.is_active:
             cursor_string = " " * self.cursor_pos + self.cursor
-            cursor_surface = self.value_font.render(cursor_string, True, (50, 50, 50))
-            self.surface.blit(cursor_surface, (0, self.height // 2 + 5))
+            cursor_surface = self.value_font.render(cursor_string, True, (255, 255, 255))
+            self.surface.blit(cursor_surface, (0, self.height // 2))
         self.screen.blit(self.surface, (self.x + 3, self.y + 3) if self.is_active else (self.x, self.y))
-
-#
-# if __name__ == "__main__":
-#     pygame.init()
-#     clock = pygame.time.Clock()
-#     screen = pygame.display.set_mode([400, 200])
-#
-#     input_box = InputBox(screen, (100, 85))
-#
-#     while True:
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 pygame.quit()
-#                 sys.exit()
-#
-#             if event.type == pygame.MOUSEBUTTONDOWN:
-#                 input_box.process_mouseclick(event)
-#
-#             if event.type == pygame.KEYDOWN:
-#                 input_box.process_keypress(event)
-#
-#         screen.fill((255, 255, 255))
-#
-#         input_box.draw()
-#         pygame.display.flip()
-#         clock.tick(60)

@@ -1,7 +1,13 @@
-from gui.button import Button
+from gui.base.button import Button
 
 
 class ClearButton(Button):
+    """
+    Button class for creating a clear button in the GUI.
+    Inherits from Button.
+
+    Upon clicking, the button clears the board.
+    """
     def __init__(self, setup, text):
         super().__init__(setup, text)
 

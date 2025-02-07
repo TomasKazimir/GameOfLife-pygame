@@ -1,68 +1,48 @@
-from gui.input_box import InputBox
+import pygame
 
-import re
+import logic
+from gui.base.input_box import InputBox
+
 
 class RuleInputBox(InputBox):
-    RULE_PATTERN = r"^R[1-9]{1}/B[0-9]+/S[0-9]+$"
+    """
+    InputBox class for creating a rule input box in the GUI.
+    Inherits from InputBox.
 
-    def __init__(self, setup, title):
+    Upon pressing Enter, the input box validates the rule and updates the game rule.
+    """
+    def __init__(self, setup, title, text):
         super().__init__(setup, title)
 
-        self.value = "R1/B3/S23"
-        self.is_rule_valid = False
-        self.validate_rule()
+        self.text = text
+        self.valid = logic.is_rule_valid(self.text)
 
-        self.cursor_pos = len(self.value)
+        self.cursor_pos = len(self.text)
         
     def process_keypress(self, event):
+        """
+        Upon pressing Enter, the input box validates the rule and updates the game rule.
+        The input box must be active for the rule to be updated.
+        The input box is deactivated after the rule is updated.
+
+        :param event: pygame event
+        :return: None
+        """
         enter_pressed = super().process_keypress(event)
         
         if enter_pressed:
-            self.convert_value_to_rule_format()
-            self.validate_rule()
-            if self.is_rule_valid:
-                rule = self.parse_rule_to_dict()
-                self.game.set_rule(rule)
-                print(self.game.rule)
+            new_rule = logic.format_text_to_rule(self.text)
+            self.valid = logic.is_rule_valid(self.text)
+
+            if self.valid:
+                self.text = new_rule
+                self.game.rule = logic.parse_rule_to_dict(new_rule)
+
+                self.game.rule_label.text = "Active rule: " + self.text
+            else:
+                last_valid_rule = logic.parse_dict_to_rule(self.game.rule)
+                self.game.rule_label.text = f"Invalid rule! ({last_valid_rule})"
             self.move_cursor_to_end()
-
-
-    def convert_value_to_rule_format(self):
-        """
-        Converts the `value` attribute to a specific format based on defined rules:
-        - Digits are added directly to the new string.
-        - Characters in "RBS" are prefixed with a '/' before adding.
-        - Ensures the result doesn't start with a '/' if the processed string begins with one.
-
-        :return: None
-        """
-        v = ""
-        for char in self.value:
-            char = char.upper()
-            if char.isdigit():
-                v += char.upper()
-            elif char in "RBS" and char not in v:
-                v += "/" + char.upper()
-
-        if len(v) > 0 and v[0] == "/":
-            v = v[1:]
-        self.value = v
-
-    def validate_rule(self):
-        self.is_rule_valid = re.match(self.RULE_PATTERN, self.value)
-
-    def parse_rule_to_dict(self):
-        rule = {}
-        last_char = ""
-        for char in self.value:
-            if char.isalpha():
-                last_char = char
-                rule[char] = []
-            elif char.isdigit():
-                if char not in rule[last_char]:
-                    rule[last_char].append(int(char))
-        return rule
-
 
 
 

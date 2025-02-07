@@ -1,15 +1,17 @@
+"""
+Interactive Game of Life simulation with Pygame
+
+Author: Tomas Kazimir
+Winter semester 2024/25
+Course: NPRG030
+"""
+
 from game import Game
-
-
-### TODO: numpy array board
-### TODO: save and load board configurations
-### TODO: input box for rules
-### TODO: docstrings
 
 
 def main():
     game = Game()
-    game.run()
+    game.loop()
 
 
 if __name__ == "__main__":
