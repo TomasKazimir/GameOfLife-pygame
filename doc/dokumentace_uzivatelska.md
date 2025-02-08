@@ -29,6 +29,7 @@ Program umožňuje uživateli následující:
 ## Požadavky
 - Python 3.12.7
 - pygame (Ujistěte se, že je nainstalován pomocí `pip install pygame`)
+- pyperclip (Ujistěte se, že je nainstalován pomocí `pip install pyperclip`)
 
 ## Spouštění
 1. Naklonujte si repozitář nebo stáhněte soubory projektu.
