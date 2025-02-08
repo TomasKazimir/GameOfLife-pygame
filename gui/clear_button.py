@@ -15,7 +15,6 @@ class ClearButton(Button):
         clicked = super().process_mouseclick(event)
 
         if clicked:
-            self.game.board = [[0 for _ in range(self.game.board_size[0])]
-                               for _ in range(self.game.board_size[1])]
+            self.game.clear_board()
 
         return clicked

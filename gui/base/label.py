@@ -1,6 +1,6 @@
 import pygame
 
-from gui.gui_element import GUIElement
+from gui.base.gui_element import GUIElement
 
 
 class Label(GUIElement):

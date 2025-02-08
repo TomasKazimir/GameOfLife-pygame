@@ -1,7 +1,5 @@
 # GameOfLife-zapoctak
 
-# GameOfLife-zapoctak
-
 This project implements Conway's Game of Life, a cellular automaton devised by mathematician John Conway. It is a
 zero-player game, meaning its evolution is determined by its initial state without further input.
 

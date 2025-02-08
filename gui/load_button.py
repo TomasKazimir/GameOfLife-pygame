@@ -4,7 +4,7 @@ import load
 
 from tkinter import filedialog
 
-import logic
+import utils
 from gui.base.button import Button
 
 
@@ -27,7 +27,7 @@ class LoadButton(Button):
             if file is not None:
                 self.game.rule, self.game.board, _ = load.load_board(filename=file.name)
 
-                rule_string = logic.parse_dict_to_rule(self.game.rule)
+                rule_string = utils.parse_dict_to_rule(self.game.rule)
 
                 # update rulebox text
                 self.game.rule_box.text = rule_string

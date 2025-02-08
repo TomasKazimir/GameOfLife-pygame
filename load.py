@@ -1,4 +1,4 @@
-import logic
+import utils
 
 Board = list[list[int]]
 
@@ -13,7 +13,7 @@ def load_board(filename: str, size: tuple = (100, 100)) -> (dict, Board, tuple[i
     :return: a tuple containing the board's rules, the board itself, and the size of the board
     """
     with open(filename, "r", encoding="utf-8") as save_file:
-        file_rule = logic.parse_rule_to_dict(save_file.readline().rstrip())
+        file_rule = utils.parse_rule_to_dict(save_file.readline().rstrip())
         x, y = tuple(map(int, save_file.readline().rstrip().split("/")))
 
         board = []

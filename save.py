@@ -1,6 +1,6 @@
 import os
 
-import logic
+import utils
 
 Board = list[list[int]]
 
@@ -20,7 +20,7 @@ def save_board(board: Board, size: tuple, rule: dict[str, list[int]], filename: 
     filename = "".join(char for char in filename if char.isalnum() or char in "._-")
 
     with open(os.getcwd() + "\\saved_boards\\" + filename + ".txt", "w", encoding="utf-8") as f:
-        rule = logic.parse_dict_to_rule(rule)
+        rule = utils.parse_dict_to_rule(rule)
         f.write(rule + "\n")
         size = "/".join(map(str, size))
         f.write(size + "\n")

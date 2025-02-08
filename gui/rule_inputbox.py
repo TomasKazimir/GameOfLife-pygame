@@ -1,6 +1,4 @@
-import pygame
-
-import logic
+import utils
 from gui.base.input_box import InputBox
 
 
@@ -15,7 +13,7 @@ class RuleInputBox(InputBox):
         super().__init__(setup, title)
 
         self.text = text
-        self.valid = logic.is_rule_valid(self.text)
+        self.valid = utils.is_rule_valid(self.text)
 
         self.cursor_pos = len(self.text)
         
@@ -31,16 +29,16 @@ class RuleInputBox(InputBox):
         enter_pressed = super().process_keypress(event)
         
         if enter_pressed:
-            new_rule = logic.format_text_to_rule(self.text)
-            self.valid = logic.is_rule_valid(self.text)
+            new_rule = utils.format_text_to_rule(self.text)
+            self.valid = utils.is_rule_valid(self.text)
 
             if self.valid:
                 self.text = new_rule
-                self.game.rule = logic.parse_rule_to_dict(new_rule)
+                self.game.rule = utils.parse_rule_to_dict(new_rule)
 
                 self.game.rule_label.text = "Active rule: " + self.text
             else:
-                last_valid_rule = logic.parse_dict_to_rule(self.game.rule)
+                last_valid_rule = utils.parse_dict_to_rule(self.game.rule)
                 self.game.rule_label.text = f"Invalid rule! ({last_valid_rule})"
             self.move_cursor_to_end()
 

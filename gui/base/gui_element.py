@@ -1,6 +1,6 @@
 import pygame
 
-from gui.gui_element_setup import GUIElementInfo
+from gui.base.gui_element_setup import GUIElementInfo
 
 
 class GUIElement:
@@ -48,7 +48,11 @@ class GUIElement:
 
     def process_mouseclick(self, event) -> bool:
         """
-        Process a mouseclick event.
+        Process a pygame mouseclick event.
+        If the user left-clicked on the element,
+        sets the element as active and returns True,
+        otherwise sets the element as inactive and returns False.
+
         :param event: pygame event - must be a MOUSEBUTTONDOWN event
         :return: True if the element was clicked, False otherwise
         """

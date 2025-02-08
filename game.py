@@ -1,10 +1,11 @@
 import pygame
 
 import load
-import logic
+import generation
+import utils
 from gui.base.label import Label
 from gui.clear_button import ClearButton
-from gui.gui_element_setup import GUIElementInfo
+from gui.base.gui_element_setup import GUIElementInfo
 from gui.load_button import LoadButton
 from gui.noise_button import NoiseButton
 from gui.reset_button import ResetButton
@@ -42,7 +43,7 @@ class Game:
         self.color_step = [3, -3, 3]
         # endregion
 
-        # region CELL-SPACE, RULE
+        # region load BOARD, RULE
         self.startup_board_file = "saved_boards/.default_board.txt"
         rule, board, size = load.load_board(filename=self.startup_board_file, size=Game.BOARD_SIZE)
         self.board = board
@@ -64,12 +65,13 @@ class Game:
                            pos=(self.sidepanel_pos[0] + offset, 0),
                            size=(350, 70)),
             title="Enter rule:",
-            text=logic.parse_dict_to_rule(self.rule))
+            text=utils.parse_dict_to_rule(self.rule))
         self.save_box = SaveInputBox(
             GUIElementInfo(self.screen, self,
                            pos=(self.sidepanel_pos[0] + offset, 200),
                            size=(350, 70)),
             title="Save current board as:")
+
         self.input_boxes = [
             self.rule_box,
             self.save_box,
@@ -85,7 +87,7 @@ class Game:
             GUIElementInfo(self.screen, self,
                            pos=(self.sidepanel_pos[0] + offset, 500),
                            size=(200, 40)),
-            text="Reset board")
+            text="Reset game")
         self.noise_button = NoiseButton(
             GUIElementInfo(self.screen, self,
                            pos=(self.sidepanel_pos[0] + offset, 600),
@@ -95,8 +97,8 @@ class Game:
             GUIElementInfo(self.screen, self,
                            pos=(self.sidepanel_pos[0] + offset, 700),
                            size=(200, 40)),
-            text="Clear board"
-        )
+            text="Clear board")
+
         self.buttons = [
             self.load_button,
             self.reset_button,
@@ -119,9 +121,11 @@ class Game:
                            pos=(self.sidepanel_pos[0] + offset, 125)),
             text="Paused" if self.paused else "Running")
 
-        self.labels = [self.rule_label,
-                       self.sim_speed_label,
-                       self.pause_label]
+        self.labels = [
+            self.rule_label,
+            self.sim_speed_label,
+            self.pause_label
+        ]
         # endregion GUI
 
         # region SIMULATION SPEED CONTROL
@@ -138,7 +142,8 @@ class Game:
     def cell_size(self):
         """
         Returns cell size in pixels.
-        cell_size := (size of screen // # cells in grid)
+        cell_size_x_coor := (width of screen // # of cells in a row)
+        cell_size_y_coor := (height of screen // # of cells in a column)
         """
         return (max(1, self.board_size_px[0] // self.board_size[0]),
                 max(1, self.board_size_px[1] // self.board_size[1]))
@@ -299,7 +304,7 @@ class Game:
             self.time = 0
             while steps > 0:
                 steps -= 1
-                self.board = logic.get_next_generation(self.board, self.rule)
+                self.board = generation.get_next_generation(self.board, self.rule)
 
     # region DRAWING
     def clear_screen(self) -> None:
