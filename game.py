@@ -16,10 +16,10 @@ from gui.save_inputbox import SaveInputBox
 class Game:
     BOARD_SIZE = (100, 100)
 
-    WINDOW_WIDTH = 1200
+    WINDOW_WIDTH = 1100
     WINDOW_HEIGHT = 800
 
-    SIDEPANEL_WIDTH = 400
+    SIDEPANEL_WIDTH = WINDOW_WIDTH - WINDOW_HEIGHT
 
     pygame.font.init()
     base_font = pygame.font.SysFont("consolas", 28)
@@ -35,7 +35,7 @@ class Game:
 
         # STATE
         self.running = True
-        self.paused = False
+        self.paused = True
 
         # region COLOR
         self.background_color = (0, 0, 0)
@@ -44,7 +44,7 @@ class Game:
         # endregion
 
         # region load BOARD, RULE
-        self.startup_board_file = "saved_boards/.default_board.txt"
+        self.startup_board_file = "saved_boards/.WelcomeMessage.txt"
         rule, board, size = load.load_board(filename=self.startup_board_file, size=Game.BOARD_SIZE)
         self.board = board
         self.board_size = size
@@ -62,15 +62,15 @@ class Game:
         # INPUT BOXES
         self.rule_box = RuleInputBox(
             GUIElementInfo(self.screen, self,
-                           pos=(self.sidepanel_pos[0] + offset, 0),
-                           size=(350, 70)),
+                           pos=(self.sidepanel_pos[0] + offset, 25),
+                           size=(250, 70)),
             title="Enter rule:",
             text=utils.parse_dict_to_rule(self.rule))
         self.save_box = SaveInputBox(
             GUIElementInfo(self.screen, self,
                            pos=(self.sidepanel_pos[0] + offset, 200),
-                           size=(350, 70)),
-            title="Save current board as:")
+                           size=(250, 70)),
+            title="Save as:")
 
         self.input_boxes = [
             self.rule_box,
@@ -85,17 +85,17 @@ class Game:
             text="Load board...")
         self.reset_button = ResetButton(
             GUIElementInfo(self.screen, self,
-                           pos=(self.sidepanel_pos[0] + offset, 500),
+                           pos=(self.sidepanel_pos[0] + offset, 400),
                            size=(200, 40)),
             text="Reset game")
         self.noise_button = NoiseButton(
             GUIElementInfo(self.screen, self,
-                           pos=(self.sidepanel_pos[0] + offset, 600),
+                           pos=(self.sidepanel_pos[0] + offset, 450),
                            size=(200, 40)),
             text="Insert noise")
         self.clear_button = ClearButton(
             GUIElementInfo(self.screen, self,
-                           pos=(self.sidepanel_pos[0] + offset, 700),
+                           pos=(self.sidepanel_pos[0] + offset, 500),
                            size=(200, 40)),
             text="Clear board")
 
@@ -110,15 +110,15 @@ class Game:
         # LABELS
         self.rule_label = Label(
             GUIElementInfo(self.screen, self,
-                           pos=(self.sidepanel_pos[0] + offset, 75)),
+                           pos=(self.sidepanel_pos[0] + offset, 100)),
             text="Active rule: " + self.rule_box.text)
         self.sim_speed_label = Label(
             GUIElementInfo(self.screen, self,
-                           pos=(self.sidepanel_pos[0] + offset, 100)),
+                           pos=(self.sidepanel_pos[0] + offset, 125)),
             text=f"Simulation speed: {30}")
         self.pause_label = Label(
             GUIElementInfo(self.screen, self,
-                           pos=(self.sidepanel_pos[0] + offset, 125)),
+                           pos=(self.sidepanel_pos[0] + offset, 150)),
             text="Paused" if self.paused else "Running")
 
         self.labels = [
@@ -166,7 +166,7 @@ class Game:
             self.draw_cursor()
             self.draw_gui()
             self.render_screen()
-            self.time += self.clock.tick(self.FPS) / 1000
+            self.time += self.clock.tick(self.FPS) / 1000  # milliseconds passed since last frame
 
     def handle_events(self) -> None:
         """
