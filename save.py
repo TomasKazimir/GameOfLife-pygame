@@ -16,7 +16,7 @@ def save_board(board: Board, size: tuple, rule: dict[str, list[int]], filename: 
     :return: None
     """
 
-    # convert filename to alphanumeric characters only
+    # convert filename to alphanumeric characters only + ._- characters
     filename = "".join(char for char in filename if char.isalnum() or char in "._-")
 
     with open(os.getcwd() + "\\saved_boards\\" + filename + ".txt", "w", encoding="utf-8") as f:

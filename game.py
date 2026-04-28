@@ -159,13 +159,14 @@ class Game:
         Game loop function.
         """
         while self.running:
-            self.handle_events()
-            self.update_board_state()
+            self.handle_events()       # user input
+            self.update_board_state()  # simulate new generation
             self.clear_screen()
             self.draw_cells()
             self.draw_cursor()
             self.draw_gui()
             self.render_screen()
+
             self.time += self.clock.tick(self.FPS) / 1000  # milliseconds passed since last frame
 
     def handle_events(self) -> None:

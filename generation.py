@@ -31,11 +31,11 @@ def get_next_generation(board: Board, rule: dict = None):
             cell = board[i][j]
             num_of_live_neighs = 0 if cell == 0 else -1
             # NEIGHBOURS
-            for di in range(
-                    max(0, i - rule["R"][0]), min(m, (i + rule["R"][0]) + 1)):
-                for dj in range(
-                        max(0, j - rule["R"][0]), min(n, (j + rule["R"][0]) + 1)):
-                    if board[di % m][dj % n] == 1:
+            for di in range(max(0, i - rule["R"][0]),
+                            min(m, (i + rule["R"][0]) + 1)):
+                for dj in range(max(0, j - rule["R"][0]),
+                                min(n, (j + rule["R"][0]) + 1)):
+                    if board[di][dj] == 1:
                         num_of_live_neighs += 1
             if cell == 1 and num_of_live_neighs in rule["S"]:
                 next_gen[i][j] = 1
